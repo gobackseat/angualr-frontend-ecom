@@ -5,6 +5,7 @@ import { tap, catchError, map, shareReplay, retry, timeout, debounceTime, distin
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { EnvironmentService } from './environment.service';
 
 // Enhanced Product Interface matching backend schema
 export interface Product {
@@ -159,7 +160,9 @@ export interface ProductDetailResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly API_URL = environment.apiUrl;
+  private get API_URL(): string {
+    return this.getApiUrl();
+  }
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
   private readonly REQUEST_TIMEOUT = 10000; // 10 seconds
   
@@ -189,6 +192,7 @@ export class ProductService {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
+    private environmentService: EnvironmentService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Clear cache periodically in browser
@@ -628,5 +632,14 @@ export class ProductService {
 
   getSizeVariantByName(product: Product, sizeName: string): SizeVariant | null {
     return product.sizeVariants?.find(sv => sv.name.toLowerCase() === sizeName.toLowerCase()) || null;
+  }
+
+  private getApiUrl(): string {
+    const apiUrl = this.environmentService.apiUrl;
+    if (!apiUrl || apiUrl === 'undefined') {
+      console.warn('API URL not configured, using fallback');
+      return 'https://e-comerce-backend-mmvv.onrender.com/api';
+    }
+    return apiUrl;
   }
 } 

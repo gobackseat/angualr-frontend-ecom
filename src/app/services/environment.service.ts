@@ -23,6 +23,11 @@ export class EnvironmentService {
    * Throws an error if any are missing
    */
   private validateEnvironment(): void {
+    // Skip validation during build time
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const missingVars: string[] = [];
 
     this.requiredEnvVars.forEach(varName => {
