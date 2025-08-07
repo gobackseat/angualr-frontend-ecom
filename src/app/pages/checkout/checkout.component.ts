@@ -1,15 +1,43 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CartService, Cart } from '../../services/cart.service';
-import { AuthService } from '../../services/auth.service';
+import { Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subject, Observable, of, throwError } from 'rxjs';
+import { switchMap, takeUntil, catchError, map } from 'rxjs/operators';
+
+// Services
+import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
-import { CheckoutService } from '../../services/checkout.service';
+import { StripeService, PaymentResult } from '../../services/stripe.service';
 import { ProductValidationService } from '../../services/product-validation.service';
-import { StripeService, PaymentResult, PaymentIntentResponse, PaymentIntentRequest } from '../../services/stripe.service';
-import { WebSocketService, OrderStatusUpdate, PaymentStatusUpdate } from '../../services/websocket.service';
-import { Subject, takeUntil, switchMap, of, Observable, throwError, map, catchError } from 'rxjs';
+import { PaymentConfirmationService, OrderVerificationData } from '../../services/payment-confirmation.service';
+import { CheckoutErrorHandlerService } from '../../services/checkout-error-handler.service';
+import { AuthService } from '../../services/auth.service';
+import { CheckoutService } from '../../services/checkout.service';
+import { WebSocketService } from '../../services/websocket.service';
+
+// Interfaces
+interface Cart {
+  items: any[];
+  totalItems: number;
+  subtotal: number;
+  tax: number;
+  shipping: number;
+  total: number;
+  currency: string;
+}
+
+interface OrderStatusUpdate {
+  orderId: string;
+  status: string;
+  timestamp: string;
+}
+
+interface PaymentStatusUpdate {
+  orderId: string;
+  status: string;
+  timestamp: string;
+}
 
 interface CheckoutFormData {
   firstName: string;
@@ -77,6 +105,8 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
     private checkoutService: CheckoutService,
     private productValidationService: ProductValidationService,
     private stripeService: StripeService,
+    private paymentConfirmationService: PaymentConfirmationService,
+    private checkoutErrorHandler: CheckoutErrorHandlerService,
     private websocketService: WebSocketService,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -443,8 +473,22 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         error: (error) => {
           this.processing = false;
-          this.error = error.message || 'An error occurred during checkout. Please try again.';
-          console.error('Secure checkout error:', error);
+          
+          // Use the error handler service for better error handling
+          this.checkoutErrorHandler.logError(error, 'checkout-submit');
+          
+          const userMessage = this.checkoutErrorHandler.getUserFriendlyMessage(error);
+          const suggestedAction = this.checkoutErrorHandler.getSuggestedAction(error);
+          
+          this.error = `${userMessage} ${suggestedAction}`;
+          
+          console.error('Secure checkout error:', {
+            originalError: error,
+            userMessage,
+            suggestedAction,
+            errorType: this.checkoutErrorHandler.getErrorType(error),
+            retryable: this.checkoutErrorHandler.isRetryable(error)
+          });
         }
       });
   }
@@ -452,10 +496,10 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Create payment intent for the order
    */
-  private createPaymentIntent(): Observable<PaymentIntentResponse | null> {
+  private createPaymentIntent(): Observable<any> { // Changed to any as PaymentIntentRequest is removed
     const formData = this.checkoutForm.value;
     
-    const request: PaymentIntentRequest = { // Changed to any as PaymentIntentRequest is removed
+    const request: any = { // Changed to any as PaymentIntentRequest is removed
       orderItems: this.cart.items.map(item => ({
         productId: item.productId,
         quantity: item.quantity,
@@ -555,45 +599,26 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
       return throwError(() => new Error('Customer email required for guest order verification'));
     }
 
-    // Verify the order exists and payment is confirmed using guest endpoint
-    return this.orderService.getGuestOrder(orderId, customerEmail).pipe(
-      map((response: any) => {
-        const order = response.data?.order || response.order || response;
+    // Use the new PaymentConfirmationService for robust verification
+    const verificationData: OrderVerificationData = {
+      orderId: orderId,
+      customerEmail: customerEmail,
+      paymentIntentId: this.paymentIntentId || undefined
+    };
+
+    return this.paymentConfirmationService.verifyOrderWithPayment(verificationData).pipe(
+      map((result) => {
+        console.log('PaymentConfirmationService: Verification result', result);
         
-        console.log('Order verification - Full response:', response);
-        console.log('Order verification - Extracted order:', order);
-        console.log('Order verification - paymentResult:', order?.paymentResult);
-        console.log('Order verification - paymentMethod:', order?.paymentMethod);
-        
-        if (!order) {
-          throw new Error('Order not found');
+        if (!result.success) {
+          throw new Error(result.error || 'Order verification failed');
         }
 
-        // Check if order has payment confirmation
-        // Check multiple possible payment confirmation indicators
-        const hasPaymentConfirmation = 
-          order.paymentResult?.id || 
-          order.paymentMethod || 
-          order.isPaid === true ||
-          order.status === 'confirmed' ||
-          order.status === 'processing';
-
-        if (!hasPaymentConfirmation) {
-          console.log('Payment confirmation check failed:');
-          console.log('- paymentResult?.id:', order.paymentResult?.id);
-          console.log('- paymentMethod:', order.paymentMethod);
-          console.log('- isPaid:', order.isPaid);
-          console.log('- status:', order.status);
-          throw new Error('Order created but payment not confirmed');
-        }
-        
-        // Additional security checks
-        if (order.status === 'cancelled') {
-          throw new Error('Order was cancelled');
-        }
-        
-        console.log('Order verification successful:', order);
-        return { order, verified: true };
+        return {
+          order: { id: result.orderId, status: result.orderStatus },
+          verified: true,
+          paymentStatus: result.paymentStatus
+        };
       }),
       catchError(error => {
         console.error('Order verification failed:', error);
