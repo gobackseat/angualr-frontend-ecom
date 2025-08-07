@@ -1,6 +1,7 @@
 {
   "name": "angulareco",
   "version": "0.0.0",
+  "description": "Angular E-commerce Frontend - Production Ready for Vercel Deployment",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
