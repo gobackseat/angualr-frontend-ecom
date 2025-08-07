@@ -72,7 +72,7 @@ import { CartSidebarService } from '../../services/cart-sidebar.service';
             <a routerLink="/" class="flex items-center space-x-2">
               <div class="relative">
                 <img 
-                  src="/assets/temp-repo/img/logo.png" 
+                  src="assets/img/logo.png" 
                   alt="Dog Backseat Extender" 
                   class="h-8 w-auto"
                   (error)="onImageError($event)"

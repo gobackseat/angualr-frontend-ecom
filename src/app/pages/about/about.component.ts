@@ -50,7 +50,7 @@ import { RouterModule } from '@angular/router';
           <!-- Image -->
           <div class="relative">
             <img 
-              src="/assets/images/about-hero.jpg" 
+              src="assets/img/hero/hero-1.jpg" 
               alt="Dog in car with backseat extender"
               class="rounded-lg shadow-lg w-full h-96 object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>

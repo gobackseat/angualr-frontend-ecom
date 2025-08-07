@@ -181,13 +181,13 @@ export class HomeHeroSectionComponent implements OnInit, OnDestroy {
   failedImages = new Set<number>();
   autoPlayInterval: any;
   
-  // Updated to use proper hero images instead of product images
+  // Updated to use correct image paths that work in production
   heroImages = [
-    '/assets/temp-repo/img/home-hero-section-imgs/black-backseat-extender-hero-slider-1.webp',
-    '/assets/temp-repo/img/home-hero-section-imgs/black-backseat-extender-hero-slider-2.webp',
-    '/assets/temp-repo/img/home-hero-section-imgs/black-backseat-extender-hero-slider-no-3.webp',
-    '/assets/temp-repo/img/home-hero-section-imgs/black-backseat-extender-hero-slider-no-4.webp',
-    '/assets/temp-repo/img/home-hero-section-imgs/black-backseat-extender-hero-slider-no-5.webp'
+    'assets/images/hero/black-backseat-extender-hero-slider-1.webp',
+    'assets/images/hero/black-backseat-extender-hero-slider-2.webp',
+    'assets/images/hero/black-backseat-extender-hero-slider-no-3.webp',
+    'assets/images/hero/black-backseat-extender-hero-slider-no-4.webp',
+    'assets/images/hero/black-backseat-extender-hero-slider-no-5.webp'
   ];
 
   constructor(

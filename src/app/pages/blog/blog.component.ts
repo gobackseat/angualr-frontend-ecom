@@ -46,7 +46,7 @@ import { RouterModule } from '@angular/router';
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Blog Post 1 -->
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/blog/post-1.jpg" alt="Dog in car" class="w-full h-48 object-cover">
+            <img src="assets/img/blog/blog-1.jpg" alt="Dog in car" class="w-full h-48 object-cover">
             <div class="p-6">
               <div class="flex items-center text-sm text-gray-500 mb-2">
                 <span>March 15, 2024</span>
@@ -67,7 +67,7 @@ import { RouterModule } from '@angular/router';
 
           <!-- Blog Post 2 -->
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/blog/post-2.jpg" alt="Car interior" class="w-full h-48 object-cover">
+            <img src="assets/img/blog/blog-2.jpg" alt="Car interior" class="w-full h-48 object-cover">
             <div class="p-6">
               <div class="flex items-center text-sm text-gray-500 mb-2">
                 <span>March 10, 2024</span>
@@ -88,7 +88,7 @@ import { RouterModule } from '@angular/router';
 
           <!-- Blog Post 3 -->
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/blog/post-3.jpg" alt="Happy dog" class="w-full h-48 object-cover">
+            <img src="assets/img/blog/blog-3.jpg" alt="Happy dog" class="w-full h-48 object-cover">
             <div class="p-6">
               <div class="flex items-center text-sm text-gray-500 mb-2">
                 <span>March 5, 2024</span>
@@ -109,7 +109,7 @@ import { RouterModule } from '@angular/router';
 
           <!-- Blog Post 4 -->
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/blog/post-4.jpg" alt="Car safety" class="w-full h-48 object-cover">
+                            <img src="assets/img/blog/blog-1.jpg" alt="Car safety" class="w-full h-48 object-cover">
             <div class="p-6">
               <div class="flex items-center text-sm text-gray-500 mb-2">
                 <span>February 28, 2024</span>
@@ -130,7 +130,7 @@ import { RouterModule } from '@angular/router';
 
           <!-- Blog Post 5 -->
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/blog/post-5.jpg" alt="Dog comfort" class="w-full h-48 object-cover">
+                            <img src="assets/img/blog/blog-2.jpg" alt="Dog comfort" class="w-full h-48 object-cover">
             <div class="p-6">
               <div class="flex items-center text-sm text-gray-500 mb-2">
                 <span>February 20, 2024</span>
@@ -151,7 +151,7 @@ import { RouterModule } from '@angular/router';
 
           <!-- Blog Post 6 -->
           <article class="bg-white rounded-lg shadow-md overflow-hidden">
-            <img src="/assets/images/blog/post-6.jpg" alt="Car accessories" class="w-full h-48 object-cover">
+                            <img src="assets/img/blog/blog-3.jpg" alt="Car accessories" class="w-full h-48 object-cover">
             <div class="p-6">
               <div class="flex items-center text-sm text-gray-500 mb-2">
                 <span>February 15, 2024</span>

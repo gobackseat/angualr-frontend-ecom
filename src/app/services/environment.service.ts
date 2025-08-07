@@ -1,86 +1,183 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-
-export interface EnvironmentConfig {
-  apiUrl: string;
-  stripePublishableKey: string;
-  websocketUrl: string;
-  enableRealTimeUpdates: boolean;
-  sanityProjectId?: string;
-  sanityDataset?: string;
-  sanityApiVersion?: string;
-  sanityToken?: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnvironmentService {
-  private config: EnvironmentConfig;
+  private readonly requiredEnvVars = [
+    'VITE_API_URL',
+    'VITE_STRIPE_PUBLISHABLE_KEY',
+    'VITE_WEBSOCKET_URL',
+    'VITE_APP_VERSION',
+    'VITE_ANALYTICS_ID',
+    'VITE_ERROR_REPORTING_URL'
+  ];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.config = this.loadEnvironmentConfig();
+  constructor() {
+    this.validateEnvironment();
   }
 
-  private loadEnvironmentConfig(): EnvironmentConfig {
-    // Try to load from environment variables first, fallback to environment.ts
-    return {
-      apiUrl: this.getEnvVar('VITE_API_URL') || environment.apiUrl,
-      stripePublishableKey: this.getEnvVar('VITE_STRIPE_PUBLISHABLE_KEY') || environment.stripePublishableKey,
-      websocketUrl: this.getEnvVar('VITE_APP_URL')?.replace('http', 'ws') || environment.websocketUrl,
-      enableRealTimeUpdates: environment.enableRealTimeUpdates,
-      sanityProjectId: this.getEnvVar('VITE_SANITY_PROJECT_ID'),
-      sanityDataset: this.getEnvVar('VITE_SANITY_DATASET'),
-      sanityApiVersion: this.getEnvVar('VITE_SANITY_API_VERSION'),
-      sanityToken: this.getEnvVar('VITE_SANITY_TOKEN')
-    };
-  }
+  /**
+   * Validates that all required environment variables are present
+   * Throws an error if any are missing
+   */
+  private validateEnvironment(): void {
+    const missingVars: string[] = [];
 
-  private getEnvVar(key: string): string | undefined {
-    // For Angular CLI, we need to access environment variables differently
-    // This will work if the variables are set in the build process
-    if (isPlatformBrowser(this.platformId)) {
-      // In browser, only access window variables, not process.env
-      return (window as any)[key];
+    this.requiredEnvVars.forEach(varName => {
+      if (!process.env[varName]) {
+        missingVars.push(varName);
+      }
+    });
+
+    if (missingVars.length > 0) {
+      const errorMessage = `Missing required environment variables: ${missingVars.join(', ')}\n\nPlease ensure all required environment variables are set in your .env.local file or deployment platform.`;
+      console.error(errorMessage);
+      
+      if (environment.production) {
+        // In production, throw error to prevent app from running with missing config
+        throw new Error(errorMessage);
+      } else {
+        // In development, just warn
+        console.warn('Environment validation failed. Some features may not work correctly.');
+      }
     }
-    // In server-side rendering, we can access process.env
-    return typeof process !== 'undefined' ? process.env?.[key] : undefined;
   }
 
+  // API Configuration
   get apiUrl(): string {
-    return this.config.apiUrl;
-  }
-
-  get stripePublishableKey(): string {
-    return this.config.stripePublishableKey;
+    return environment.apiUrl;
   }
 
   get websocketUrl(): string {
-    return this.config.websocketUrl;
+    return environment.websocketUrl;
   }
 
+  // Stripe Configuration
+  get stripePublishableKey(): string {
+    return environment.stripePublishableKey;
+  }
+
+  get stripeOptions(): any {
+    return environment.stripeOptions;
+  }
+
+  // App Configuration
+  get appName(): string {
+    return environment.appName;
+  }
+
+  get version(): string {
+    return environment.version;
+  }
+
+  // Feature Flags
   get enableRealTimeUpdates(): boolean {
-    return this.config.enableRealTimeUpdates;
+    return environment.enableRealTimeUpdates;
   }
 
-  get sanityProjectId(): string | undefined {
-    return this.config.sanityProjectId;
+  get enableAnalytics(): boolean {
+    return environment.enableAnalytics;
   }
 
-  get sanityDataset(): string | undefined {
-    return this.config.sanityDataset;
+  get enableErrorReporting(): boolean {
+    return environment.enableErrorReporting;
   }
 
-  get sanityApiVersion(): string | undefined {
-    return this.config.sanityApiVersion;
+  get enablePerformanceMonitoring(): boolean {
+    return environment.enablePerformanceMonitoring;
   }
 
-  get sanityToken(): string | undefined {
-    return this.config.sanityToken;
+  get enableDebugLogging(): boolean {
+    return environment.enableDebugLogging;
   }
 
-  getConfig(): EnvironmentConfig {
-    return { ...this.config };
+  get enableMockData(): boolean {
+    return environment.enableMockData;
+  }
+
+  get enableTestMode(): boolean {
+    return environment.enableTestMode;
+  }
+
+  // Performance Settings
+  get requestTimeout(): number {
+    return environment.requestTimeout;
+  }
+
+  get retryAttempts(): number {
+    return environment.retryAttempts;
+  }
+
+  get cacheDuration(): number {
+    return environment.cacheDuration;
+  }
+
+  // Business Logic
+  get freeShippingThreshold(): number {
+    return environment.freeShippingThreshold;
+  }
+
+  get defaultTaxRate(): number {
+    return environment.defaultTaxRate;
+  }
+
+  get maxCartItems(): number {
+    return environment.maxCartItems;
+  }
+
+  get maxQuantityPerItem(): number {
+    return environment.maxQuantityPerItem;
+  }
+
+  // External Services
+  get analyticsId(): string {
+    return environment.analyticsId;
+  }
+
+  get errorReportingUrl(): string {
+    return environment.errorReportingUrl;
+  }
+
+  // Security Settings
+  get enableCSP(): boolean {
+    return environment.enableCSP;
+  }
+
+  get enableHSTS(): boolean {
+    return environment.enableHSTS;
+  }
+
+  /**
+   * Get all environment variables for debugging
+   */
+  getAllConfig(): any {
+    return {
+      production: environment.production,
+      apiUrl: this.apiUrl,
+      websocketUrl: this.websocketUrl,
+      stripePublishableKey: this.stripePublishableKey,
+      appName: this.appName,
+      version: this.version,
+      enableRealTimeUpdates: this.enableRealTimeUpdates,
+      enableAnalytics: this.enableAnalytics,
+      enableErrorReporting: this.enableErrorReporting,
+      enablePerformanceMonitoring: this.enablePerformanceMonitoring,
+      enableDebugLogging: this.enableDebugLogging,
+      enableMockData: this.enableMockData,
+      enableTestMode: this.enableTestMode,
+      requestTimeout: this.requestTimeout,
+      retryAttempts: this.retryAttempts,
+      cacheDuration: this.cacheDuration,
+      freeShippingThreshold: this.freeShippingThreshold,
+      defaultTaxRate: this.defaultTaxRate,
+      maxCartItems: this.maxCartItems,
+      maxQuantityPerItem: this.maxQuantityPerItem,
+      analyticsId: this.analyticsId,
+      errorReportingUrl: this.errorReportingUrl,
+      enableCSP: this.enableCSP,
+      enableHSTS: this.enableHSTS
+    };
   }
 } 

@@ -1,13 +1,13 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3001/api',
-  stripePublishableKey: 'pk_test_51RDZZD01xy1dyeH8ERFOWsxCQcja2ujjntPRbWCwLBNUy5b3YqPAWkWmo8JhSvgEaeMnuc6XwMXXW82MuR1qyO8b00oIho4zqN',
-  websocketUrl: 'ws://localhost:3001',
-  enableRealTimeUpdates: false, // Disabled for now until backend supports it
+  apiUrl: process.env['VITE_API_URL']!,
+  stripePublishableKey: process.env['VITE_STRIPE_PUBLISHABLE_KEY']!,
+  websocketUrl: process.env['VITE_WEBSOCKET_URL']!,
+  enableRealTimeUpdates: process.env['VITE_ENABLE_REAL_TIME_UPDATES'] === 'true',
   
   // Production-ready configuration
   appName: 'PawComfort E-Commerce',
-  version: '1.0.0',
+  version: process.env['VITE_APP_VERSION']!,
   
   // Performance settings
   requestTimeout: 15000, // 15 seconds
@@ -15,9 +15,9 @@ export const environment = {
   cacheDuration: 300000, // 5 minutes
   
   // Feature flags
-  enableAnalytics: true,
-  enableErrorReporting: true,
-  enablePerformanceMonitoring: true,
+  enableAnalytics: process.env['VITE_ENABLE_ANALYTICS'] === 'true',
+  enableErrorReporting: process.env['VITE_ENABLE_ERROR_REPORTING'] === 'true',
+  enablePerformanceMonitoring: process.env['VITE_ENABLE_PERFORMANCE_MONITORING'] === 'true',
   
   // Security settings
   enableCSP: true,
@@ -30,18 +30,17 @@ export const environment = {
   maxQuantityPerItem: 10,
   
   // External services
-  analyticsId: 'G-XXXXXXXXXX', // Replace with actual GA4 ID
-  errorReportingUrl: 'https://your-error-reporting-service.com',
+  analyticsId: process.env['VITE_ANALYTICS_ID']!,
+  errorReportingUrl: process.env['VITE_ERROR_REPORTING_URL']!,
   
   // Development settings
-  enableDebugLogging: true,
-  enableMockData: false, // Disabled for production
-  enableTestMode: false,
+  enableDebugLogging: process.env['VITE_ENABLE_DEBUG_LOGGING'] === 'true',
+  enableMockData: process.env['VITE_ENABLE_MOCK_DATA'] === 'true',
+  enableTestMode: process.env['VITE_ENABLE_TEST_MODE'] === 'true',
   
   // Stripe settings
   stripeOptions: {
     apiVersion: '2023-10-16',
-    // Suppress HTTPS warning in development
     betas: ['elements_enable_deferred_intent_beta_1']
   }
 }; 

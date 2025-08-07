@@ -51,7 +51,7 @@ import { Subject } from 'rxjs';
           <!-- Hero Image -->
           <div class="flex justify-center">
             <img 
-              src="/assets/temp-repo/img/story-imgs/the-family-behind-backseat-extender-for-dogs-1024x683.png" 
+              src="assets/img/hero/hero-1.jpg" 
               alt="Happy family with dogs"
               class="w-full max-w-lg h-auto rounded-2xl shadow-2xl animate-fade-in-up"
               style="animation-delay: 0.6s;"
@@ -96,7 +96,7 @@ import { Subject } from 'rxjs';
             </div>
             <div class="flex justify-center">
               <img 
-                src="/assets/temp-repo/img/story-imgs/the-backseat-extender-for-dogs-us-1-700x700.png" 
+                src="assets/img/product/product-1.jpg" 
                 alt="Quality guarantee"
                 class="w-full max-w-md h-auto rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 loading="lazy">
@@ -107,7 +107,7 @@ import { Subject } from 'rxjs';
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="order-2 lg:order-1 flex justify-center">
               <img 
-                src="/assets/temp-repo/img/story-imgs/the-backseat-extender-for-dogs-us-2.png" 
+                src="assets/img/product/product-2.jpg" 
                 alt="Flexible exchange policy"
                 class="w-full max-w-md h-auto rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 loading="lazy">
@@ -150,7 +150,7 @@ import { Subject } from 'rxjs';
             </div>
             <div class="flex justify-center">
               <img 
-                src="/assets/temp-repo/img/story-imgs/Save-for-pets.webp" 
+                src="assets/img/product/product-3.jpg" 
                 alt="Supporting street dogs"
                 class="w-full max-w-md h-auto rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 loading="lazy">
@@ -161,7 +161,7 @@ import { Subject } from 'rxjs';
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="order-2 lg:order-1 flex justify-center">
               <img 
-                src="/assets/temp-repo/img/story-imgs/kirk-park-beach-couple-6704-700x467.jpeg" 
+                src="assets/img/product/product-4.jpg" 
                 alt="Emergency lifeline"
                 class="w-full max-w-md h-auto rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 loading="lazy">
@@ -204,7 +204,7 @@ import { Subject } from 'rxjs';
             </div>
             <div class="flex justify-center">
               <img 
-                src="/assets/temp-repo/img/story-imgs/the-backseat-extender-for-dogs-us.png" 
+                src="assets/img/product/product-5.jpg" 
                 alt="Foldable design"
                 class="w-full max-w-md h-auto rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 loading="lazy">
@@ -215,7 +215,7 @@ import { Subject } from 'rxjs';
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="order-2 lg:order-1 flex justify-center">
               <img 
-                src="/assets/temp-repo/img/story-imgs/the-family-behind-backseat-extender-for-dogs.png" 
+                src="assets/img/product/product-6.jpg" 
                 alt="Custom made for your car and dog"
                 class="w-full max-w-md h-auto rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 loading="lazy">
