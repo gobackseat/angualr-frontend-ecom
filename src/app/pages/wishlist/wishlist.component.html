@@ -1,0 +1,53 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">My Wishlist</h1>
+      <p class="text-gray-600 mt-2">Save items you love for later</p>
+    </div>
+
+    <div *ngIf="wishlistItems.length === 0" class="text-center py-12">
+      <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+      </svg>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Your wishlist is empty</h3>
+      <p class="text-gray-600 mb-6">Start adding items you love to your wishlist</p>
+      <button
+        routerLink="/product-detail"
+        class="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors duration-200">
+        Start Shopping
+      </button>
+    </div>
+
+    <div *ngIf="wishlistItems.length > 0" class="space-y-6">
+      <div *ngFor="let item of wishlistItems" class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center space-x-6">
+          <div class="flex-shrink-0">
+            <img
+              [src]="item.image || '/assets/images/products/dog-backseat-extender-black.jpg'"
+              [alt]="item.name"
+              class="w-24 h-24 object-cover rounded-lg">
+          </div>
+          
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ item.name }}</h3>
+            <div class="text-gray-600">{{ item.color || 'Black' }}</div>
+            <div class="text-2xl font-bold text-orange-600 mt-2">${{ item.price }}</div>
+          </div>
+          
+          <div class="flex flex-col space-y-2">
+            <button
+              (click)="addToCart(item)"
+              class="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200">
+              Add to Cart
+            </button>
+            <button
+              (click)="removeFromWishlist(item._id || item.id || '')"
+              class="text-red-600 hover:text-red-700 text-sm font-medium">
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
