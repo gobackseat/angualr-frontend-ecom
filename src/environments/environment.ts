@@ -1,13 +1,13 @@
 export const environment = {
   production: false,
-  apiUrl: process.env['VITE_API_URL']!,
-  stripePublishableKey: process.env['VITE_STRIPE_PUBLISHABLE_KEY']!,
-  websocketUrl: process.env['VITE_WEBSOCKET_URL']!,
-  enableRealTimeUpdates: process.env['VITE_ENABLE_REAL_TIME_UPDATES'] === 'true',
+  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+  stripePublishableKey: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_your_stripe_publishable_key_here',
+  websocketUrl: import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3001',
+  enableRealTimeUpdates: import.meta.env.VITE_ENABLE_REAL_TIME_UPDATES === 'true',
   
   // Production-ready configuration
   appName: 'PawComfort E-Commerce',
-  version: process.env['VITE_APP_VERSION']!,
+  version: import.meta.env.VITE_APP_VERSION || '1.0.0',
   
   // Performance settings
   requestTimeout: 15000, // 15 seconds
@@ -15,9 +15,9 @@ export const environment = {
   cacheDuration: 300000, // 5 minutes
   
   // Feature flags
-  enableAnalytics: process.env['VITE_ENABLE_ANALYTICS'] === 'true',
-  enableErrorReporting: process.env['VITE_ENABLE_ERROR_REPORTING'] === 'true',
-  enablePerformanceMonitoring: process.env['VITE_ENABLE_PERFORMANCE_MONITORING'] === 'true',
+  enableAnalytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+  enableErrorReporting: import.meta.env.VITE_ENABLE_ERROR_REPORTING === 'true',
+  enablePerformanceMonitoring: import.meta.env.VITE_ENABLE_PERFORMANCE_MONITORING === 'true',
   
   // Security settings
   enableCSP: true,
@@ -30,13 +30,13 @@ export const environment = {
   maxQuantityPerItem: 10,
   
   // External services
-  analyticsId: process.env['VITE_ANALYTICS_ID']!,
-  errorReportingUrl: process.env['VITE_ERROR_REPORTING_URL']!,
+  analyticsId: import.meta.env.VITE_ANALYTICS_ID || '',
+  errorReportingUrl: import.meta.env.VITE_ERROR_REPORTING_URL || '',
   
   // Development settings
-  enableDebugLogging: process.env['VITE_ENABLE_DEBUG_LOGGING'] === 'true',
-  enableMockData: process.env['VITE_ENABLE_MOCK_DATA'] === 'true',
-  enableTestMode: process.env['VITE_ENABLE_TEST_MODE'] === 'true',
+  enableDebugLogging: import.meta.env.VITE_ENABLE_DEBUG_LOGGING === 'true',
+  enableMockData: import.meta.env.VITE_ENABLE_MOCK_DATA === 'true',
+  enableTestMode: import.meta.env.VITE_ENABLE_TEST_MODE === 'true',
   
   // Stripe settings
   stripeOptions: {
