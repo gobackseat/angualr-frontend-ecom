@@ -1,9 +1,9 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3001/api',
-  stripePublishableKey: 'pk_test_your_stripe_publishable_key_here',
-  websocketUrl: 'ws://localhost:3001',
-  enableRealTimeUpdates: false,
+  apiUrl: 'https://e-comerce-backend-mmvv.onrender.com/api',
+  stripePublishableKey: 'pk_test_51RDZZD01xy1dyeH8ERFOWsxCQcja2ujjntPRbWCwLBNUy5b3YqPAWkWmo8JhSvgEaeMnuc6XwMXXW82MuR1qyO8b00oIho4zqN',
+  websocketUrl: 'wss://e-comerce-backend-mmvv.onrender.com',
+  enableRealTimeUpdates: true,
   
   // Production-ready configuration
   appName: 'PawComfort E-Commerce',
@@ -15,9 +15,9 @@ export const environment = {
   cacheDuration: 300000, // 5 minutes
   
   // Feature flags
-  enableAnalytics: false,
-  enableErrorReporting: false,
-  enablePerformanceMonitoring: false,
+  enableAnalytics: true,
+  enableErrorReporting: true,
+  enablePerformanceMonitoring: true,
   
   // Security settings
   enableCSP: true,
@@ -30,11 +30,11 @@ export const environment = {
   maxQuantityPerItem: 10,
   
   // External services
-  analyticsId: '',
-  errorReportingUrl: '',
+  analyticsId: 'G-XXXXXXXXXX',
+  errorReportingUrl: 'https://your-error-reporting-service.com',
   
   // Development settings
-  enableDebugLogging: true,
+  enableDebugLogging: false,
   enableMockData: false,
   enableTestMode: false,
   
