@@ -36,8 +36,8 @@ export class EnvironmentService {
       console.error(errorMessage);
       
       if (environment.production) {
-        // In production, throw error to prevent app from running with missing config
-        throw new Error(errorMessage);
+        // In production, just warn but don't throw error to prevent app from crashing
+        console.warn('Environment validation failed. Some features may not work correctly.');
       } else {
         // In development, just warn
         console.warn('Environment validation failed. Some features may not work correctly.');

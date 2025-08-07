@@ -73,7 +73,7 @@ import { CartSidebarService } from '../../services/cart-sidebar.service';
               <div class="relative">
                 <img 
                   src="assets/img/logo.png" 
-                  alt="Dog Backseat Extender" 
+                  alt="PawComfort Logo" 
                   class="h-8 w-auto"
                   (error)="onImageError($event)"
                 />

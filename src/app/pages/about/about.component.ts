@@ -49,10 +49,7 @@ import { RouterModule } from '@angular/router';
 
           <!-- Image -->
           <div class="relative">
-            <img 
-              src="assets/img/hero/hero-1.jpg" 
-              alt="Dog in car with backseat extender"
-              class="rounded-lg shadow-lg w-full h-96 object-cover">
+            <img src="assets/images/hero/black-backseat-extender-hero-slider-1.webp" alt="About Us Hero" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
           </div>
         </div>
