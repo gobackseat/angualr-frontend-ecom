@@ -5,49 +5,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class EnvironmentService {
-  private readonly requiredEnvVars = [
-    'VITE_API_URL',
-    'VITE_STRIPE_PUBLISHABLE_KEY',
-    'VITE_WEBSOCKET_URL',
-    'VITE_APP_VERSION',
-    'VITE_ANALYTICS_ID',
-    'VITE_ERROR_REPORTING_URL'
-  ];
-
   constructor() {
-    this.validateEnvironment();
-  }
-
-  /**
-   * Validates that all required environment variables are present
-   * Throws an error if any are missing
-   */
-  private validateEnvironment(): void {
-    // Skip validation during build time
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const missingVars: string[] = [];
-
-    this.requiredEnvVars.forEach(varName => {
-      if (!process.env[varName]) {
-        missingVars.push(varName);
-      }
-    });
-
-    if (missingVars.length > 0) {
-      const errorMessage = `Missing required environment variables: ${missingVars.join(', ')}\n\nPlease ensure all required environment variables are set in your .env.local file or deployment platform.`;
-      console.error(errorMessage);
-      
-      if (environment.production) {
-        // In production, just warn but don't throw error to prevent app from crashing
-        console.warn('Environment validation failed. Some features may not work correctly.');
-      } else {
-        // In development, just warn
-        console.warn('Environment validation failed. Some features may not work correctly.');
-      }
-    }
+    // Environment validation removed since we're using hardcoded values
   }
 
   // API Configuration
