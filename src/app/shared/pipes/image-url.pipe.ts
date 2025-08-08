@@ -18,6 +18,11 @@ export class ImageUrlPipe implements PipeTransform {
       return trimmed;
     }
 
+    // Frontend assets with leading slash
+    if (/^\/assets\//.test(trimmed)) {
+      return trimmed; // keep as absolute to current origin
+    }
+
     // Local Angular assets → return as-is
     if (
       trimmed.startsWith('assets/') ||
