@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductService, Product } from '../../core/services/product.service';
+import { ProductService, Product } from '../../services/product.service';
 import { CartService, AddToCartRequest } from '../../services/cart.service';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ImageUrlPipe],
   template: `
     <div class="bg-white min-h-screen">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -25,7 +26,7 @@ import { CartService, AddToCartRequest } from '../../services/cart.service';
             <!-- Product Image -->
             <div class="aspect-w-1 aspect-h-1 w-full">
               <img 
-                [src]="product.images[0]" 
+                [src]="product.images[0] | imageUrl" 
                 [alt]="product.name"
                 class="w-full h-64 object-cover">
             </div>
@@ -95,8 +96,8 @@ export class ProductsComponent implements OnInit {
   }
 
   loadProducts() {
-    this.productService.getProducts().subscribe(products => {
-      this.products = products;
+    this.productService.getProducts().subscribe(response => {
+      this.products = (response as any)?.products || (response as any) || [];
     });
   }
 

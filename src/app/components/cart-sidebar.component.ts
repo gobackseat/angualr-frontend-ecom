@@ -74,7 +74,7 @@ import { CartSidebarService } from '../services/cart-sidebar.service';
             class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg"
           >
             <img 
-              [src]="item.image || '/assets/images/products/dog-backseat-extender.jpg'" 
+              [src]="item.image || 'assets/images/products/dog-backseat-extender.jpg'" 
               [alt]="item.name"
               class="w-16 h-16 object-cover rounded-lg"
             />

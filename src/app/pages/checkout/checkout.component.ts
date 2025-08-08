@@ -456,18 +456,22 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('Secure checkout completed successfully:', result);
             this.processing = false;
             
-            // Store order ID for thank you page
+            // Store order ID and email for thank you page
             const orderId = result.order?.id || result.data?.order?.id;
+            const email = this.checkoutForm?.value?.email;
             if (orderId) {
               localStorage.setItem('lastOrderId', orderId);
+            }
+            if (email) {
+              localStorage.setItem('lastOrderEmail', email);
             }
             
             // Clear cart after successful order
             this.cartService.clearCart();
             
-            // Navigate to thank you page
+            // Navigate to thank you page (include email for guest orders)
             this.router.navigate(['/thank-you'], {
-              queryParams: { orderId: orderId }
+              queryParams: { orderId: orderId, email: email || undefined }
             });
           }
         },

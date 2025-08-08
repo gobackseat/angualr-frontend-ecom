@@ -8,11 +8,12 @@ import { CartService, AddToCartRequest } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { ProductService, Product, ColorVariant, SizeVariant } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
   selector: 'app-product-showcase',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ImageUrlPipe],
   template: `
     <section class="py-24 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 relative overflow-hidden w-full min-h-screen">
       <!-- Animated Background Elements -->
@@ -47,7 +48,7 @@ import { AuthService } from '../../services/auth.service';
             <!-- Mobile-optimized Image Slider -->
             <div class="relative overflow-hidden rounded-2xl shadow-2xl group w-full">
               <img 
-                [src]="currentProductImage" 
+                [src]="currentProductImage | imageUrl" 
                 [alt]="'Dog Backseat Extender in ' + selectedColor + ' - View ' + (currentImageIndex + 1)"
                 class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"
@@ -92,7 +93,7 @@ import { AuthService } from '../../services/auth.service';
                 [class]="i === currentImageIndex ? 'border-orange-500 shadow-lg' : 'border-gray-200 hover:border-orange-300'"
               >
                 <img 
-                  [src]="image" 
+                  [src]="image | imageUrl" 
                   [alt]="'Thumbnail ' + (i + 1)"
                   class="w-full h-16 object-cover"
                   loading="lazy"

@@ -77,7 +77,7 @@ import { AuthService } from '../../services/auth.service';
                   <div class="flex items-center">
                     <!-- Product Image -->
                     <div class="flex-shrink-0 w-20 h-20">
-                      <img [src]="item.image || '/assets/images/products/dog-backseat-extender.jpg'" 
+                      <img [src]="item.image || 'assets/images/products/dog-backseat-extender.jpg'" 
                            [alt]="item.name"
                            class="w-full h-full object-cover rounded-md">
                     </div>

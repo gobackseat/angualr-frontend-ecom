@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
   selector: 'app-product-showcase',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ImageUrlPipe],
   template: `
     <section id="products" class="py-16 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,7 +30,7 @@ import { Router } from '@angular/router';
             <!-- Product Image -->
             <div class="relative h-64 overflow-hidden">
               <img 
-                [src]="product.image" 
+                [src]="product.image | imageUrl" 
                 [alt]="product.name"
                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
               <div class="absolute top-4 left-4">

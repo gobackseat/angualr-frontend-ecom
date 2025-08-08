@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../services/order.service';
+import { environment } from '../../../environments/environment';
 
 interface OrderDetails {
   id: string;
@@ -252,17 +253,48 @@ export class ThankYouComponent implements OnInit {
       return;
     }
 
-    this.orderService.getOrder(orderId).subscribe({
-      next: (order: any) => {
-        this.orderDetails = order;
-        this.loading = false;
-      },
-      error: (error: any) => {
-        console.error('Failed to load order details:', error);
-        this.error = 'Unable to load order details. Please check your email for confirmation.';
-        this.loading = false;
-      }
-    });
+    // Get customer email from localStorage (stored during checkout)
+    const customerEmail = (this.route.snapshot.queryParams['email']) || (isPlatformBrowser(this.platformId) ? 
+                         localStorage.getItem('lastOrderEmail') : null);
+
+    if (!customerEmail) {
+      // Try authenticated order first, then fall back to guest order
+      this.orderService.getOrder(orderId).subscribe({
+        next: (order: any) => {
+          this.orderDetails = this.transformOrderData(order);
+          this.loading = false;
+        },
+        error: (error: any) => {
+          console.error('Failed to load authenticated order details:', error);
+          this.error = 'Unable to load order details. Please check your email for confirmation.';
+          this.loading = false;
+        }
+      });
+    } else {
+      // Use guest order service
+      this.orderService.getGuestOrder(orderId, customerEmail).subscribe({
+        next: (response: any) => {
+          console.log('Guest order response:', response);
+          
+          // Extract order from response
+          const order = response.data?.order || response.order || response;
+          
+          if (!order) {
+            this.error = 'Order not found. Please check your email for order details.';
+            this.loading = false;
+            return;
+          }
+
+          this.orderDetails = this.transformOrderData(order);
+          this.loading = false;
+        },
+        error: (error: any) => {
+          console.error('Failed to load guest order details:', error);
+          this.error = 'Unable to load order details. Please check your email for confirmation.';
+          this.loading = false;
+        }
+      });
+    }
   }
 
   retryLoadOrder() {
@@ -275,5 +307,59 @@ export class ThankYouComponent implements OnInit {
 
   goToOrders() {
       this.router.navigate(['/orders']);
+  }
+
+  /**
+   * Normalize image URL to handle backend relative paths
+   */
+  private resolveImage(src: string): string {
+    if (!src) return 'assets/images/placeholder-product.webp';
+    if (src.startsWith('http')) return src;
+    if (src.startsWith('/')) {
+      const host = environment.apiUrl.replace(/\/api$/, '');
+      return `${host}${src}`;
+    }
+    return src;
+  }
+
+  /**
+   * Transform backend order data to frontend format
+   */
+  private transformOrderData(order: any): OrderDetails {
+    return {
+      id: order.id || order._id || '',
+      orderNumber: order.orderNumber || order.id || order._id || '',
+      status: order.status || (order.isPaid ? 'confirmed' : 'processing'),
+      totalPrice: Number(order.total || order.totalPrice || 0),
+      itemsPrice: Number(order.subtotal || order.itemsPrice || 0),
+      taxPrice: Number(order.tax || order.taxPrice || 0),
+      shippingPrice: Number(order.shipping || order.shippingPrice || 0),
+      items: (order.items || order.orderItems || []).map((item: any) => ({
+        product: item.productId || item.product || '',
+        name: item.name || item.productName || 'Product',
+        quantity: Number(item.quantity || 1),
+        price: Number(item.price || 0),
+        image: this.resolveImage(item.image || item.productImage)
+      })),
+      customerInfo: {
+        firstName: order.customerInfo?.firstName || order.shippingAddress?.firstName || '',
+        lastName: order.customerInfo?.lastName || order.shippingAddress?.lastName || '',
+        email: order.customerInfo?.email || order.email || '',
+        phone: order.customerInfo?.phone || order.shippingAddress?.phone || ''
+      },
+      shippingAddress: {
+        firstName: order.shippingAddress?.firstName || '',
+        lastName: order.shippingAddress?.lastName || '',
+        address: order.shippingAddress?.address || '',
+        city: order.shippingAddress?.city || '',
+        state: order.shippingAddress?.state || '',
+        postalCode: order.shippingAddress?.postalCode || order.shippingAddress?.zipCode || '',
+        country: order.shippingAddress?.country || '',
+        phone: order.shippingAddress?.phone || ''
+      },
+      createdAt: order.createdAt || new Date().toISOString(),
+      estimatedDeliveryDate: order.estimatedDelivery || order.estimatedDeliveryDate,
+      trackingNumber: order.trackingNumber
+    };
   }
 } 
